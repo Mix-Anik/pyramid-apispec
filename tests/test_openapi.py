@@ -1,17 +1,19 @@
 import pytest
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from marshmallow import fields, Schema
 from flask import make_response
+from marshmallow import fields, Schema
 
-from flask_apispec.paths import rule_to_params
-from flask_apispec.views import MethodResource
 from flask_apispec import doc, use_kwargs, marshal_with
 from flask_apispec.apidoc import ViewConverter, ResourceConverter
+from flask_apispec.paths import rule_to_params
+from flask_apispec.views import MethodResource
+
 
 @pytest.fixture()
 def marshmallow_plugin():
     return MarshmallowPlugin()
+
 
 @pytest.fixture
 def spec(marshmallow_plugin):
@@ -22,14 +24,18 @@ def spec(marshmallow_plugin):
         plugins=[marshmallow_plugin],
     )
 
+
 @pytest.fixture()
 def openapi(marshmallow_plugin):
     return marshmallow_plugin.converter
 
+
 def ref_path(spec):
-    if spec.openapi_version.version[0] < 3:
+    print(spec.openapi_version)
+    if spec.openapi_version.major < 3:
         return "#/definitions/"
     return "#/components/schemas/"
+
 
 def test_error_if_spec_does_not_have_marshmallow_plugin(app):
     bad_spec = APISpec(
@@ -43,6 +49,7 @@ def test_error_if_spec_does_not_have_marshmallow_plugin(app):
     with pytest.raises(RuntimeError):
         ResourceConverter(app=app, spec=bad_spec)
 
+
 class TestFunctionView:
 
     @pytest.fixture
@@ -53,6 +60,7 @@ class TestFunctionView:
         @marshal_with(schemas.BandSchema, description='a band')
         def get_band(band_id):
             return models.Band(name='slowdive', genre='spacerock')
+
         return get_band
 
     @pytest.fixture
@@ -67,13 +75,13 @@ class TestFunctionView:
         params = path['get']['parameters']
         rule = app.url_map._rules_by_endpoint['get_band'][0]
         expected = (
-            [{
-                'in': 'query',
-                'name': 'name',
-                'type': 'string',
-                'required': False,
-                'default': 'queen',
-            }] + rule_to_params(rule)
+                [{
+                    'in': 'query',
+                    'name': 'name',
+                    'type': 'string',
+                    'required': False,
+                    'default': 'queen',
+                }] + rule_to_params(rule)
         )
         assert params == expected
 
@@ -84,6 +92,7 @@ class TestFunctionView:
 
     def test_tags(self, path):
         assert path['get']['tags'] == ['band']
+
 
 class TestArgSchema:
 
@@ -96,6 +105,7 @@ class TestArgSchema:
         @use_kwargs(ArgSchema, location='query')
         def get_band(**kwargs):
             return kwargs
+
         return get_band
 
     @pytest.fixture
@@ -110,11 +120,12 @@ class TestArgSchema:
         params = path['get']['parameters']
         rule = app.url_map._rules_by_endpoint['get_band'][0]
         expected = (
-            openapi.schema2parameters(
-                Schema.from_dict({'name': fields.Str()}), location='query') +
-            rule_to_params(rule)
+                openapi.schema2parameters(
+                    Schema.from_dict({'name': fields.Str()}), location='query') +
+                rule_to_params(rule)
         )
         assert params == expected
+
 
 class TestCallableAsArgSchema(TestArgSchema):
 
@@ -130,7 +141,9 @@ class TestCallableAsArgSchema(TestArgSchema):
         @use_kwargs(schema_factory, location='query')
         def get_band(**kwargs):
             return kwargs
+
         return get_band
+
 
 class TestDeleteView:
 
@@ -140,6 +153,7 @@ class TestDeleteView:
         @marshal_with(None, code=204, description='a deleted band')
         def delete_band(band_id):
             return make_response('', 204)
+
         return delete_band
 
     @pytest.fixture
@@ -154,6 +168,7 @@ class TestDeleteView:
         response = path['delete']['responses']['204']
         assert response['description'] == 'a deleted band'
         assert response['schema'] == {}
+
 
 class TestResourceView:
 
@@ -181,8 +196,8 @@ class TestResourceView:
         params = path['get']['parameters']
         rule = app.url_map._rules_by_endpoint['band'][0]
         expected = (
-            [{'in': 'query', 'name': 'name', 'required': False, 'type': 'string'}] +
-            rule_to_params(rule)
+                [{'in': 'query', 'name': 'name', 'required': False, 'type': 'string'}] +
+                rule_to_params(rule)
         )
         assert params == expected
 
@@ -210,6 +225,7 @@ class TestMultipleLocations:
         @use_kwargs(BodySchema, location='body')
         def get_band(**kwargs):
             return kwargs
+
         return get_band
 
     @pytest.fixture
@@ -224,19 +240,20 @@ class TestMultipleLocations:
         params = path['get']['parameters']
         rule = app.url_map._rules_by_endpoint['get_band'][0]
         expected = (
-            [{
-                'in': 'query',
-                'name': 'name',
-                'required': False,
-                'type': 'string'
-            }, {
-                'in': 'body',
-                'name': 'body',
-                'required': False,
-                'schema': {'$ref': '#/definitions/Body'}
-            }] + rule_to_params(rule)
+                [{
+                    'in': 'query',
+                    'name': 'name',
+                    'required': False,
+                    'type': 'string'
+                }, {
+                    'in': 'body',
+                    'name': 'body',
+                    'required': False,
+                    'schema': {'$ref': '#/definitions/Body'}
+                }] + rule_to_params(rule)
         )
         assert params == expected
+
 
 class TestGetFieldsNoLocationProvided:
 
@@ -260,17 +277,18 @@ class TestGetFieldsNoLocationProvided:
     def test_params(self, app, path):
         params = path['get']['parameters']
         assert {
-            'in': 'body',
-            'name': 'body',
-            'required': False,
-            'schema': {
-                'properties': {
-                    'address': {'type': 'string'},
-                    'name': {'type': 'string'},
-                },
-                'type': 'object',
-            },
-        } in params
+                   'in': 'body',
+                   'name': 'body',
+                   'required': False,
+                   'schema': {
+                       'properties': {
+                           'address': {'type': 'string'},
+                           'name': {'type': 'string'},
+                       },
+                       'type': 'object',
+                   },
+               } in params
+
 
 class TestGetFieldsBodyLocation(TestGetFieldsNoLocationProvided):
 
@@ -286,19 +304,20 @@ class TestGetFieldsBodyLocation(TestGetFieldsNoLocationProvided):
     def test_params(self, app, path):
         params = path['get']['parameters']
         assert {
-            'in': 'body',
-            'name': 'body',
-            'required': False,
-            'schema': {
-                'properties': {
-                    'address': {'type': 'string'},
-                    'name': {'type': 'string'},
-                    'email': {'type': 'string'},
-                },
-                'required': ["name", "email"],
-                'type': 'object',
-            },
-        } in params
+                   'in': 'body',
+                   'name': 'body',
+                   'required': False,
+                   'schema': {
+                       'properties': {
+                           'address': {'type': 'string'},
+                           'name': {'type': 'string'},
+                           'email': {'type': 'string'},
+                       },
+                       'required': ["name", "email"],
+                       'type': 'object',
+                   },
+               } in params
+
 
 class TestSchemaNoLocationProvided:
 
@@ -311,6 +330,7 @@ class TestSchemaNoLocationProvided:
         @use_kwargs(BodySchema)
         def get_band(**kwargs):
             return kwargs
+
         return get_band
 
     @pytest.fixture

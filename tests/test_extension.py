@@ -10,6 +10,7 @@ from flask_apispec.views import MethodResource
 def docs(app):
     return FlaskApiSpec(app)
 
+
 class TestExtension:
     def test_deferred_register(self, app):
         blueprint = Blueprint('test', __name__)
@@ -33,6 +34,7 @@ class TestExtension:
         @doc(tags=['band'])
         def get_band(band_id):
             return 'queen'
+
         docs.register(get_band)
         assert '/bands/{band_id}/' in docs.spec._paths
 
@@ -41,6 +43,7 @@ class TestExtension:
         class BandResource(MethodResource):
             def get(self, **kwargs):
                 return 'slowdive'
+
         app.add_url_rule('/bands/<band_id>/', view_func=BandResource.as_view('band'))
         docs.register(BandResource, endpoint='band')
         assert '/bands/{band_id}/' in docs.spec._paths
@@ -57,7 +60,7 @@ class TestExtension:
         app.add_url_rule('/bands/<band_id>/',
                          view_func=BandResource.as_view('band', True, arg_two=False))
         docs.register(BandResource, endpoint='band',
-                      resource_class_args=(True, ),
+                      resource_class_args=(True,),
                       resource_class_kwargs={'arg_two': True})
         assert '/bands/{band_id}/' in docs.spec._paths
 
@@ -66,6 +69,7 @@ class TestExtension:
         @doc(tags=['band'])
         def get_band(band_id):
             return 'queen'
+
         docs.register_existing_resources()
         assert '/bands/{band_id}/' in docs.spec._paths
 
@@ -95,4 +99,4 @@ class TestExtension:
 
         assert docs.spec.title == 'test-extension'
         assert docs.spec.version == '2.1'
-        assert docs.spec.openapi_version == '2.0'
+        assert str(docs.spec.openapi_version) == '2.0'

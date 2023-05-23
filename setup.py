@@ -1,30 +1,24 @@
-import re
-from setuptools import setup
+import importlib_metadata
 from setuptools import find_packages
+from setuptools import setup
+
 
 REQUIRES = [
-    'flask>=0.10.1',
     'marshmallow>=3.0.0',
     'webargs>=6.0.0',
     'apispec>=4.0.0',
 ]
 
+TEST_REQUIRES = [
+    'flask>=0.10.1',
+    'pytest',
+    'pytest-cov',
+    'WebTest'
+]
 
-def find_version(fname):
-    """Attempts to find the version number in the file names fname.
-    Raises RuntimeError if not found.
-    """
-    version = ''
-    with open(fname) as fp:
-        reg = re.compile(r'__version__ = [\'"]([^\'"]*)[\'"]')
-        for line in fp:
-            m = reg.match(line)
-            if m:
-                version = m.group(1)
-                break
-    if not version:
-        raise RuntimeError('Cannot find version information')
-    return version
+DEV_REQUIRES = [
+    'invoke'
+]
 
 
 def read(fname):
@@ -34,24 +28,27 @@ def read(fname):
 
 
 setup(
-    name='flask-apispec',
-    version=find_version('flask_apispec/__init__.py'),
-    description='Build and document REST APIs with Flask and apispec',
+    name='pyramid-apispec',
+    version=importlib_metadata.version('flask_apispec'),
+    description='Build and document REST APIs with Pyramid and apispec',
     long_description=read('README.rst'),
-    author='Joshua Carp',
-    author_email='jm.carp@gmail.com',
-    url='https://github.com/jmcarp/flask-apispec',
-    packages=find_packages(exclude=('test*', )),
+    author='Joshua Carp, Mix-Anik',
+    url='https://github.com/Mix-Anik/pyramid-apispec',
+    packages=find_packages(exclude=('test*',)),
     package_dir={'flask_apispec': 'flask_apispec'},
     include_package_data=True,
     install_requires=REQUIRES,
+    extras_require={
+        'dev': TEST_REQUIRES + DEV_REQUIRES,
+        'testing': TEST_REQUIRES
+    },
     license='MIT',
     zip_safe=False,
-    keywords='flask marshmallow webargs apispec',
-    python_requires=">=3.6",
+    keywords='pyramid marshmallow webargs apispec',
+    python_requires=">=3.7",
     test_suite='tests',
     project_urls={
-        'Bug Reports': 'https://github.com/jmcarp/flask-apispec/issues',
-        'Changelog': 'https://flask-apispec.readthedocs.io/en/latest/changelog.html',
+        'Bug Reports': 'https://github.com/Mix-Anik/pyramid-apispec/issues',
+        # 'Changelog': 'https://pyramid-apispec.readthedocs.io/en/latest/changelog.html',
     },
 )
