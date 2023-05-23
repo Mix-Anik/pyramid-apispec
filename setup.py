@@ -1,4 +1,3 @@
-import importlib_metadata
 from setuptools import find_packages
 from setuptools import setup
 
@@ -29,7 +28,7 @@ def read(fname):
 
 setup(
     name='pyramid-apispec',
-    version=importlib_metadata.version('flask_apispec'),
+    version='1.0.0-alpha',
     description='Build and document REST APIs with Pyramid and apispec',
     long_description=read('README.rst'),
     author='Joshua Carp, Mix-Anik',

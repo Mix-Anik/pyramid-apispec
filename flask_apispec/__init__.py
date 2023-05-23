@@ -3,7 +3,6 @@ from flask_apispec.extension import FlaskApiSpec
 from flask_apispec.utils import Ref
 from flask_apispec.views import MethodResource, ResourceMeta
 
-__version__ = '1.0.0-alpha'
 __all__ = [
     'doc',
     'wrap_with',
