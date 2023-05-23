@@ -20,4 +20,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .[testing]
       - name: Running unit tests
-        run: python -m py.test
+        run: python -m pytest
