@@ -6,11 +6,11 @@ API Reference
 Annotations
 -----------
 
-.. automodule:: flask_apispec.annotations
+.. automodule:: pyramid_apispec.annotations
     :members:
 
 Extension
 ---------
 
-.. automodule:: flask_apispec.extension
+.. automodule:: pyramid_apispec.extension
     :members:

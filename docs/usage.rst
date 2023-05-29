@@ -6,13 +6,13 @@ Usage
 Decorators
 ----------
 
-Use the :func:`use_kwargs <flask_apispec.annotations.use_kwargs>` and :func:`marshal_with <flask_apispec.annotations.marshal_with>` decorators on functions, methods, or classes to declare request parsing and response marshalling behavior, respectively.
+Use the :func:`use_kwargs <pyramid_apispec.annotations.use_kwargs>` and :func:`marshal_with <pyramid_apispec.annotations.marshal_with>` decorators on functions, methods, or classes to declare request parsing and response marshalling behavior, respectively.
 
 .. code-block:: python
 
     import flask
     from webargs import fields
-    from flask_apispec import use_kwargs, marshal_with
+    from pyramid_apispec import use_kwargs, marshal_with
 
     from .models import Pet
     from .schemas import PetSchema
@@ -29,7 +29,7 @@ Decorators can also be applied to view classes, e.g. Flask's :class:`MethodView 
 
 .. code-block:: python
 
-    from flask_apispec import MethodResource
+    from pyramid_apispec import MethodResource
 
     @marshal_with(PetSchema)
     class StoreResource(MethodResource):
@@ -77,7 +77,7 @@ To allow subclasses to flexibly override parent settings, **flask-apispec** also
 
 .. code-block:: python
 
-    from flask_apispec import Ref
+    from pyramid_apispec import Ref
 
     @marshal_with(Ref('schema'))
     class BaseResource(MethodResource):
@@ -98,7 +98,7 @@ Swagger documentation
 
 .. code-block:: python
 
-    from flask_apispec import FlaskApiSpec
+    from pyramid_apispec import FlaskApiSpec
 
     docs = FlaskApiSpec(app)
 
@@ -109,7 +109,7 @@ Swagger documentation
 
 By default, **flask-apispec** serves Swagger JSON at /swagger and Swagger UI at /swagger-ui. To override either URL, set the `APISPEC_SWAGGER_URL` and `APISPEC_SWAGGER_UI_URL` variables on the Flask application config, respectively. To disable serving either resource, set the corresponding configuration variable to `None`.
 
-To add Swagger markup that is not currently supported by apispec_, use the :func:`doc <flask_apispec.annotations.doc>` decorator:
+To add Swagger markup that is not currently supported by apispec_, use the :func:`doc <pyramid_apispec.annotations.doc>` decorator:
 
 .. code-block:: python
 

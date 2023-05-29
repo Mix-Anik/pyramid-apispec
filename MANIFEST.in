@@ -1,2 +1,2 @@
 include *.rst LICENSE
-recursive-include flask_apispec *
+recursive-include pyramid_apispec *

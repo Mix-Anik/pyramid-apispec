@@ -33,7 +33,7 @@ Quickstart
 .. code-block:: python
 
     from flask import Flask
-    from flask_apispec import use_kwargs, marshal_with
+    from pyramid_apispec import use_kwargs, marshal_with
 
     from marshmallow import Schema
     from webargs import fields
@@ -57,7 +57,7 @@ Quickstart
 .. code-block:: python
 
     from flask import make_response
-    from flask_apispec.views import MethodResource
+    from pyramid_apispec.views import MethodResource
 
     class PetResource(MethodResource):
 
@@ -89,7 +89,7 @@ Quickstart
 
     from apispec import APISpec
     from apispec.ext.marshmallow import MarshmallowPlugin
-    from flask_apispec.extension import FlaskApiSpec
+    from pyramid_apispec.extension import FlaskApiSpec
 
     app.config.update({
         'APISPEC_SPEC': APISpec(

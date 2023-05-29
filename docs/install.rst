@@ -16,12 +16,10 @@ From Source
 
 You can clone the public repo: ::
 
-    git clone https://github.com/jmcarp/flask-apispec.git
+    git clone https://github.com/Mix-Anik/pyramid-apispec.git
 
 Once you have the source, you can install it into your site-packages with ::
 
-    $ pip install invoke
-    $ invoke install
-    $ python setup.py install
+    $ pip install [dev]
 
 .. _Github: https://github.com/jmcarp/flask-apispec

@@ -1,6 +1,3 @@
-node_modules/
-flask_apispec/static/
-
 *.py[cod]
 
 # C extensions
@@ -50,5 +47,4 @@ _sandbox
 
 # JetBrains
 .idea/
-
 .pytest_cache/
